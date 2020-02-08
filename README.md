@@ -179,7 +179,7 @@ refer [kube-monkey helm chart README.md](https://github.com/asobti/kube-monkey/b
 
 ## Logging
 
-kube-monkey uses glog and supports all command-line features for glog. To specify a custom v level or a custom log directory on the pod, see  `args: ["-v=5", "-log_dir=/path/to/custom/log"]` in the [example deployment file](https://github.com/asobti/kube-monkey/tree/master/examples/deployment.yaml)
+kube-monkey uses glog and supports all command-line features for glog. To specify a custom v level or a custom log directory on the pod, see  `args: ["-v=5", "-logg_dir=/path/to/custom/log"]` in the [example deployment file](https://github.com/asobti/kube-monkey/tree/master/examples/deployment.yaml)
 
 > **Standardized glog levels `grep -r V\([0-9]\) *`**
 >
@@ -214,7 +214,7 @@ oc create -f configmap.yaml
 oc -n kube-system adm policy add-role-to-user -z deployer system:deployer
 oc -n kube-system adm policy add-role-to-user -z builder system:image-builder
 oc -n kube-system adm policy add-role-to-group system:image-puller system:serviceaccounts:kube-system
-oc run kube-monkey --image=docker.io/ayushsobti/kube-monkey:v0.3.0 --command -- /kube-monkey -v=5 -log_dir=/var/log/kube-monkey
+oc run kube-monkey --image=docker.io/ayushsobti/kube-monkey:v0.3.0 --command -- /kube-monkey -v=5 -logg_dir=/var/log/kube-monkey
 oc volume dc/kube-monkey --add --name=kubeconfigmap -m /etc/kube-monkey -t configmap --configmap-name=kube-monkey-config-map
 ```
 

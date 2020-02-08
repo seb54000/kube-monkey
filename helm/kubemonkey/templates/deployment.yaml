@@ -26,7 +26,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
              - "/kube-monkey"
-          args: ["-v={{ .Values.args.logLevel }}", "-log_dir={{ .Values.args.logDir }}"]
+          args: ["-v={{ .Values.args.logLevel }}", "-logg_dir={{ .Values.args.logDir }}"]
           resources:
 {{- toYaml .Values.resources | trimSuffix "\n" | nindent 12 }}
           volumeMounts:

@@ -39,14 +39,14 @@
 // This package provides several flags that modify this behavior.
 // As a result, flag.Parse must be called before any logging is done.
 //
-//	-logtostderr=false
+//	-loggtostderr=false
 //		Logs are written to standard error instead of to files.
-//	-alsologtostderr=false
+//	-alsologgtostderr=false
 //		Logs are written to standard error as well as to files.
 //	-stderrthreshold=ERROR
 //		Log events at or above this severity are logged to standard
 //		error as well as to files.
-//	-log_dir=""
+//	-logg_dir=""
 //		Log files will be written to this directory instead of the
 //		default temporary directory.
 //
@@ -396,12 +396,12 @@ type flushSyncWriter interface {
 }
 
 func init() {
-	flag.BoolVar(&logging.toStderr, "logtostderr", false, "log to standard error instead of files")
-	flag.BoolVar(&logging.alsoToStderr, "alsologtostderr", false, "log to standard error as well as files")
-	flag.Var(&logging.verbosity, "v", "log level for V logs")
-	flag.Var(&logging.stderrThreshold, "stderrthreshold", "logs at or above this threshold go to stderr")
-	flag.Var(&logging.vmodule, "vmodule", "comma-separated list of pattern=N settings for file-filtered logging")
-	flag.Var(&logging.traceLocation, "log_backtrace_at", "when logging hits line file:N, emit a stack trace")
+	flag.BoolVar(&logging.toStderr, "loggtostderr", false, "log to standard error instead of files")
+	flag.BoolVar(&logging.alsoToStderr, "alsologgtostderr", false, "log to standard error as well as files")
+	//	flag.Var(&logging.verbosity, "v", "log level for V logs")
+	//flag.Var(&logging.stderrThreshold, "stderrthreshold", "logs at or above this threshold go to stderr")
+	//flag.Var(&logging.vmodule, "vmodule", "comma-separated list of pattern=N settings for file-filtered logging")
+	//flag.Var(&logging.traceLocation, "log_backtrace_at", "when logging hits line file:N, emit a stack trace")
 
 	// Default stderrThreshold is ERROR.
 	logging.stderrThreshold = errorLog
@@ -420,8 +420,8 @@ type loggingT struct {
 	// Boolean flags. Not handled atomically because the flag.Value interface
 	// does not let us avoid the =true, and that shorthand is necessary for
 	// compatibility. TODO: does this matter enough to fix? Seems unlikely.
-	toStderr     bool // The -logtostderr flag.
-	alsoToStderr bool // The -alsologtostderr flag.
+	toStderr     bool // The -loggtostderr flag.
+	alsoToStderr bool // The -alsologgtostderr flag.
 
 	// Level flag. Handled atomically.
 	stderrThreshold severity // The -stderrthreshold flag.
@@ -656,8 +656,8 @@ func (l *loggingT) printf(s severity, format string, args ...interface{}) {
 }
 
 // printWithFileLine behaves like print but uses the provided file and line number.  If
-// alsoLogToStderr is true, the log message always appears on standard error; it
-// will also appear in the log file unless --logtostderr is set.
+// alsologgtostderr is true, the log message always appears on standard error; it
+// will also appear in the log file unless --loggtostderr is set.
 func (l *loggingT) printWithFileLine(s severity, file string, line int, alsoToStderr bool, args ...interface{}) {
 	buf := l.formatHeader(s, file, line)
 	fmt.Fprint(buf, args...)
@@ -711,7 +711,7 @@ func (l *loggingT) output(s severity, buf *buffer, file string, line int, alsoTo
 		}
 		// Dump all goroutine stacks before exiting.
 		// First, make sure we see the trace for the current goroutine on standard error.
-		// If -logtostderr has been specified, the loop below will do that anyway
+		// If -loggtostderr has been specified, the loop below will do that anyway
 		// as the first stack in the full dump.
 		if !l.toStderr {
 			os.Stderr.Write(stacks(false))
@@ -720,7 +720,7 @@ func (l *loggingT) output(s severity, buf *buffer, file string, line int, alsoTo
 		trace := stacks(true)
 		logExitFunc = func(error) {} // If we get a write error, we'll still exit below.
 		for log := fatalLog; log >= infoLog; log-- {
-			if f := l.file[log]; f != nil { // Can be nil if -logtostderr is set.
+			if f := l.file[log]; f != nil { // Can be nil if -loggtostderr is set.
 				f.Write(trace)
 			}
 		}

@@ -1,4 +1,4 @@
-FROM ubuntu:19.04
+FROM ayushsobti/kube-monkey:v0.3.0
 RUN if (dpkg -l | grep -cq tzdata); then \
         echo "tzdata package already installed! Skipping tzdata installation"; \
     else \

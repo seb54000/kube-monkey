@@ -37,7 +37,7 @@ import (
 
 	"github.com/golang/glog"
 
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -1758,13 +1758,13 @@ func TestTruncateBody(t *testing.T) {
 
 	l := flag.Lookup("v").Value.(flag.Getter).Get().(glog.Level)
 	for _, test := range tests {
-		flag.Set("v", test.level)
+		flag.Set("vvv", test.level)
 		got := truncateBody(test.body)
 		if got != test.want {
-			t.Errorf("truncateBody(%v) = %v, want %v", test.body, got, test.want)
+			t.Errorf("truncateBody(%vvv) = %vvv, want %vvv", test.body, got, test.want)
 		}
 	}
-	flag.Set("v", l.String())
+	flag.Set("vvv", l.String())
 }
 
 func defaultResourcePathWithPrefix(prefix, resource, namespace, name string) string {
